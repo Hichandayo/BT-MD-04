@@ -27,7 +27,9 @@ dependencies {
     implementation('org.glassfish.jersey.media:jersey-media-json-jackson:2.34')
     implementation('org.glassfish.jersey.inject:jersey-cdi2-se:2.34')
     implementation('org.jboss.weld.se:weld-se-core:3.1.9.Final')
-
+    implementation 'javax.servlet:jstl:1.2'
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
