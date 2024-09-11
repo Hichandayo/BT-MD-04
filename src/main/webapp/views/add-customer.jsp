@@ -14,7 +14,7 @@
 <h1>Thêm mới khách hàng</h1>
 <form action="/customers" method="post">
     <div>
-        <label for="name"></label>
+        <label for="name">name</label>
         <input type="text" name="name" id="name">
     </div>
     <div>
