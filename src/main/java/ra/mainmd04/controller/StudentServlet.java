@@ -62,9 +62,7 @@ public class StudentServlet extends HttpServlet {
             case "edit":
                 updateStudent(request, response);
                 break;
-            case "delete":
-                deleteStudent(request, response);
-                break;
+
             default:
                 listStudents(request, response);
                 break;
