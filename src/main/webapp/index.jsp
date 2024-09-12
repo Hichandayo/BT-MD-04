@@ -11,8 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-<a href="/users?action=">Bai 1</a>
-<a href="/students?action=list">Bai 2</a>
-
+<a href="/views/login.jsp">dang nhap</a>
 </body>
 </html>
