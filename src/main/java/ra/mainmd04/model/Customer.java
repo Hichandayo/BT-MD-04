@@ -5,13 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class User {
+public class Customer {
     private int id;
     private String name;
-    private String email;
-    private int age;
+    private LocalDate birthDay;
+    private String address;
+    private String imageUrl;
+
 }
