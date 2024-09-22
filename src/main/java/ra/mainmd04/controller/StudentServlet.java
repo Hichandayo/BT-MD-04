@@ -2,140 +2,98 @@ package ra.mainmd04.controller;
 
 
 
-import ra.mainmd04.model.Student;
-import ra.mainmd04.service.IStudentService;
-import ra.mainmd04.service.StudentServiceIMPL;
+import org.example.baitap1.dao.student.IStudentDao;
+import org.example.baitap1.dao.student.StudentDao;
+import org.example.baitap1.models.Student;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 
-@WebServlet(name = "StudentServlet", value = "/students")
+@WebServlet(value = "/student")
 public class StudentServlet extends HttpServlet {
-    private IStudentService studentService;
+    private IStudentDao studentDao = new StudentDao();
 
     @Override
-    public void init() {
-        studentService = new StudentServiceIMPL();
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "";
-        }
-
-        switch (action) {
-            case "create":
-                showCreateForm(request, response);
-                break;
-            case "edit":
-                showEditForm(request, response);
-                break;
-            case "delete":
-                showDeleteForm(request, response);
-                break;
-            case "list":
-                listStudents(request, response);
-                break;
-
+        if (action != null) {
+            switch (action) {
+                case "GETALL":
+                    request.setAttribute("students", studentDao.getAll());
+                    request.getRequestDispatcher("/views/list.jsp").forward(request, response);
+                    break;
+                case "DELETE":
+                    Integer idDel = Integer.valueOf(request.getParameter("id"));
+                    studentDao.delete(idDel);
+                    response.sendRedirect("/student?action=GETALL");
+                    break;
+                case "DETAIL":
+                    Integer idDetail = Integer.valueOf(request.getParameter("id"));
+                    request.setAttribute("student", studentDao.getById(idDetail));
+                    request.getRequestDispatcher("/views/detail.jsp").forward(request, response);
+                    break;
+                case "EDIT":
+                    Integer idEdit = Integer.valueOf(request.getParameter("id"));
+                    request.setAttribute("student", studentDao.getById(idEdit));
+                    request.getRequestDispatcher("/views/edit.jsp").forward(request, response);
+                    break;
+                case "CREATE":
+                    request.getRequestDispatcher("/views/create.jsp").forward(request, response);
+                    break;
+                case "SEARCH":
+                    String name = request.getParameter("name");
+                    request.setAttribute("students", studentDao.searchByName(name));
+                    request.getRequestDispatcher("/views/search.jsp").forward(request, response);
+                    break;
+                default:
+                    response.sendRedirect("/student?action=GETALL");
+                    break;
+            }
+        } else {
+            response.sendRedirect("/student?action=GETALL");
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "";
+        boolean status = request.getParameter("status") != null;
+
+        if (action != null) {
+            switch (action) {
+                case "ADD":
+                    Student newStudent = new Student(
+                            0,
+                            request.getParameter("name"),
+                            request.getParameter("email"),
+                            request.getParameter("address"),
+                            request.getParameter("phone"),
+                            status
+                    );
+                    studentDao.save(newStudent);
+                    response.sendRedirect("/student?action=GETALL");
+                    break;
+                case "UPDATE":
+                    Student updateStudent = new Student(
+                            Integer.parseInt(request.getParameter("id")),
+                            request.getParameter("name"),
+                            request.getParameter("email"),
+                            request.getParameter("address"),
+                            request.getParameter("phone"),
+                            status
+                    );
+                    studentDao.update(updateStudent);
+                    response.sendRedirect("/student?action=GETALL");
+                    break;
+                default:
+                    response.sendRedirect("/student?action=GETALL");
+                    break;
+            }
+        } else {
+            response.sendRedirect("/student?action=GETALL");
         }
-
-        switch (action) {
-            case "create":
-                createStudent(request, response);
-                break;
-            case "edit":
-                updateStudent(request, response);
-                break;
-
-            default:
-                listStudents(request, response);
-                break;
-        }
-    }
-
-    private void listStudents(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<Student> listStudent = studentService.selectAllStudents();
-        request.setAttribute("listStudent", listStudent);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/list.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/create.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void createStudent(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String phone = request.getParameter("phone");
-        boolean status = Boolean.parseBoolean(request.getParameter("status"));
-
-        Student newStudent = new Student(fullName, email, address, phone, status);
-        studentService.insertStudent(newStudent);
-        response.sendRedirect("students");
-    }
-
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Student existingStudent = studentService.selectStudent(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/edit.jsp");
-        request.setAttribute("student", existingStudent);
-        dispatcher.forward(request, response);
-    }
-
-    private void updateStudent(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String phone = request.getParameter("phone");
-        boolean status = Boolean.parseBoolean(request.getParameter("status"));
-
-        Student student = new Student(id, fullName, email, address, phone, status);
-        studentService.updateStudent(student);
-        response.sendRedirect("students");
-    }
-
-    private void showDeleteForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Student existingStudent = studentService.selectStudent(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/delete.jsp");
-        request.setAttribute("student", existingStudent);
-        dispatcher.forward(request, response);
-    }
-
-    private void deleteStudent(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        try {
-            studentService.deleteStudent(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        response.sendRedirect("students");
     }
 }
