@@ -2,18 +2,17 @@
   Created by IntelliJ IDEA.
   User: MBK670
   Date: 9/24/2024
-  Time: 6:15 AM
+  Time: 6:16 AM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Kết quả phép tính</title>
+    <title>Menu</title>
 </head>
 <body>
-<h1>Kết quả</h1>
-<p>${num1} ${operation} ${num2} = ${result}</p>
-<br/>
-<a href="/list1">Go back</a>
+<a href="categories/list-category">Category</a>
+<a href="products/list-product">Product</a>
+<a href="/">Quay lại trang chủ</a>
 </body>
 </html>
