@@ -1,4 +1,4 @@
-package ra.mainmd04;
+package ra.mainmd04.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
