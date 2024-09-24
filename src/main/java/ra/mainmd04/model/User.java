@@ -5,15 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@Setter
 @AllArgsConstructor
 @Getter
-@Setter
-public class Medical {
+public class User {
     private int id;
     private String fullName;
-    private String dateOfBirth;
-    private String gender;
+    private String email;
+    private String password;
     private String address;
-    private String phoneNumber;
-    private String healthIssues;
+    private String phone;
+    private boolean status;
 }

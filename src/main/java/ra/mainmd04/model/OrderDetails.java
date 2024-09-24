@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-public class Mail {
+@NoArgsConstructor
+public class OrderDetails {
     private int id;
-    private String language;
-    private int pages;
-    private boolean spams;
-    private String signature;
+    private int orderId;
+    private int productId;
+    private int quantity;
+    private double price;
+    private Product1 product;
 }

@@ -11,10 +11,11 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Session 18" %></h1>
+<h1><%= "Hello World!" %>
+</h1>
 <br/>
-<a href="/updateConfiguration">Bai tap 1</a>
-<a href="/song">Bai tap 2</a>
-<a href="/medical">Bai tap 3</a>
+<a href="/products">Bai tap 1</a>
+<a href="/admin">Bai tap 2</a>
+<a href="/user-cart">Bai tap 3</a>
 </body>
 </html>
